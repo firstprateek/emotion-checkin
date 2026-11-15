@@ -1,0 +1,17 @@
+{
+  "name": "emotion-checkin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Private home-screen web app for logging feelings through the day, served from a Mac mini over Tailscale.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server/server.mjs",
+    "test": "node --test 'test/**/*.test.mjs'"
+  },
+  "dependencies": {
+    "web-push": "4.0.0"
+  }
+}

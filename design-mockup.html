@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Check-in App Design</title>
+<style>
+:root{--bg:#f3f4f2;--card:#ffffff;--fg:#1d211f;--muted:#5d6560;--faint:#8b928d;--line:#d5d9d6;--accentbg:#e3eefa;--accentfg:#174f8a;--accentline:#8fb6e0;--btn:#1d211f;--onbtn:#ffffff;--calm:#1D9E75;--pull:#EF9F27;--hard:#D85A30}
+@media (prefers-color-scheme:dark){:root{--bg:#141716;--card:#1e2220;--fg:#e8ebe9;--muted:#a9b0ab;--faint:#7c837e;--line:#3a403c;--accentbg:#16304d;--accentfg:#a9cdf2;--accentline:#3d6a99;--btn:#e8ebe9;--onbtn:#141716;color-scheme:dark}}
+body{background:var(--bg);color:var(--fg);font:14px/1.5 -apple-system,system-ui,sans-serif;margin:0;padding:24px max(16px,env(safe-area-inset-left))}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;max-width:1300px;margin:0 auto}
+.ph{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:18px;display:flex;flex-direction:column;gap:11px}
+.cap{font-size:13px;color:var(--muted);margin:0 0 8px;font-weight:600}
+.lbl{font-size:11px;color:var(--faint);letter-spacing:.06em;margin:4px 0 0;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.c{border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px}
+.on{background:var(--accentbg);color:var(--accentfg);border-color:var(--accentline)}
+.btn{background:var(--btn);color:var(--onbtn);border-radius:12px;text-align:center;padding:11px;font-weight:600}
+.fld{border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--faint);font-size:13px}
+.dots{display:flex;gap:5px;flex-wrap:wrap}.d{width:11px;height:11px;border-radius:50%;display:inline-block}.m{border:1.5px solid var(--faint);box-sizing:border-box}
+.k{background:var(--calm)}.p{background:var(--pull)}.h{background:var(--hard)}
+.muted{color:var(--muted);font-size:13px;margin:0}
+.row{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px}
+.banner{background:var(--accentbg);color:var(--accentfg);border-radius:12px;padding:10px 12px;font-size:13px}
+</style></head><body>
+<div class="grid">
+
+<div><p class="cap">1 · Check-in (opens from the reminder)</p><div class="ph">
+<div style="display:flex;justify-content:space-between;gap:8px"><b>2:15 PM · What am I feeling right now?</b><span style="color:var(--faint);font-size:13px">Skip</span></div>
+<p class="lbl">Feeling</p>
+<div class="chips"><span class="c">Calm</span><span class="c">Focused</span><span class="c">Bored</span><span class="c on">Restless</span><span class="c">Craving</span><span class="c">Anxious</span><span class="c">Irritated</span><span class="c">Low</span><span class="c" style="color:var(--muted)">+ word</span></div>
+<p class="lbl">Where in my body</p>
+<div class="chips"><span class="c">Head</span><span class="c">Jaw/throat</span><span class="c on">Chest</span><span class="c">Stomach</span><span class="c">Shoulders</span><span class="c">Hands</span><span class="c">Can't tell</span></div>
+<p class="lbl">What it's about</p>
+<div class="chips"><span class="c">Hard task</span><span class="c on">News/scrolling</span><span class="c">People</span><span class="c">Money</span><span class="c">Health</span><span class="c">Nothing specific</span></div>
+<div class="fld">Avoiding the hard part of the report</div>
+<div class="btn">Save</div>
+<p class="muted" style="text-align:center">Then for 1 second: "Saved. Back to it." · Today: start the report before opening news.</p>
+</div></div>
+
+<div><p class="cap">2 · Today (home)</p><div class="ph">
+<div style="display:flex;justify-content:space-between"><b style="font-size:17px">Sunday, Nov 8</b><span style="color:var(--muted)">⚙︎</span></div>
+<div class="banner">Ready to close the day? About 2 minutes. →</div>
+<p class="lbl">9 AM – 9 PM</p>
+<div class="dots"><span class="d k"></span><span class="d k"></span><span class="d k"></span><span class="d m"></span><span class="d p"></span><span class="d k"></span><span class="d p"></span><span class="d p"></span><span class="d m"></span><span class="d h"></span><span class="d p"></span><span class="d p"></span><span class="d m"></span><span class="d p"></span><span class="d k"></span><span class="d h"></span><span class="d m"></span><span class="d k"></span><span class="d p"></span><span class="d k"></span><span class="d m"></span><span class="d k"></span><span class="d k"></span><span class="d m"></span></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)"><span><span class="d k"></span> calm, focused</span><span><span class="d p"></span> bored, restless, craving</span><span><span class="d h"></span> anxious, irritated, low</span><span><span class="d m"></span> skipped</span></div>
+<p class="muted">Last: Restless · chest · News/scrolling, 2:15 PM</p>
+<p class="muted">Working on today: start the report before opening news.</p>
+<div class="btn">Check in now</div>
+</div></div>
+
+<div><p class="cap">3 · Night review (about 2 minutes)</p><div class="ph">
+<b>Sunday, Nov 8 · Closing the day</b>
+<p class="muted">Yesterday I wanted to improve: start the report before opening news.</p>
+<div class="chips"><span class="c">Did it</span><span class="c on">Partly</span><span class="c">Not yet</span></div>
+<p class="lbl">What the day showed</p>
+<p style="margin:0">Restless ×7 · Bored ×5 · Focused ×4</p>
+<p class="muted">Felt it most in: chest (9) · Mostly about: News/scrolling (6)</p>
+<p class="muted">News/scrolling came up 6 times, mostly 1–4 PM. Focused 4 times, all before noon.</p>
+<p class="lbl">What went well today?</p>
+<div class="fld">Stayed with the spreadsheet 40 min while bored</div>
+<p class="lbl">What should I improve tomorrow?</p>
+<div class="fld">Stand up after lunch before touching my phone</div>
+<div class="btn">Close the day</div>
+</div></div>
+
+<div><p class="cap">4 · Settings (also shown on first launch)</p><div class="ph">
+<p class="lbl">Remind me every</p>
+<div class="chips"><span class="c">15</span><span class="c">20</span><span class="c on">30</span><span class="c">45</span><span class="c">60 min</span></div>
+<div class="row"><span>Active hours</span><span class="muted">9:00 AM – 9:00 PM</span></div>
+<div class="row"><span>Night review at</span><span class="muted">9:30 PM</span></div>
+<div class="row"><span>Pause until tomorrow</span><span style="width:34px;height:20px;border-radius:999px;background:var(--line);display:inline-block"></span></div>
+<div class="row"><span>Export my data</span><span class="muted">↓</span></div>
+<p class="muted" style="margin-top:6px">Everything stays on this phone. No account, no streaks, no charts to scroll.</p>
+</div></div>
+
+</div></body></html>

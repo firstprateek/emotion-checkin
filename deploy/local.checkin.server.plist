@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Template: scripts/deploy.sh fills in the home-folder and VAPID-subject placeholders when it installs this file. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>local.checkin.server</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/node</string>
+    <string>__HOME__/apps/checkin/server/server.mjs</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>__HOME__/apps/checkin</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>HOST</key>
+    <string>127.0.0.1</string>
+    <key>PORT</key>
+    <string>8790</string>
+    <key>DATA_DIR</key>
+    <string>__HOME__/apps/checkin-data</string>
+    <key>VAPID_SUBJECT</key>
+    <string>__VAPID_SUBJECT__</string>
+  </dict>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>__HOME__/Library/Logs/checkin-server.log</string>
+  <key>StandardErrorPath</key>
+  <string>__HOME__/Library/Logs/checkin-server.log</string>
+</dict>
+</plist>

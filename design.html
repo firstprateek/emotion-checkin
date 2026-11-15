@@ -1,0 +1,270 @@
+<title>Emotion Check-in Design</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: a short design brief on top, then phone screens in a wrapping grid, then the open decisions. */
+:root{
+  --bg:#eef1ef; --card:#ffffff; --fg:#18201c; --muted:#56615b; --faint:#87918b; --line:#d3d9d5;
+  --accent:#1f6f5c; --accentbg:#dcefe8; --accentfg:#145444; --accentline:#8cc7b4;
+  --btn:#18201c; --onbtn:#ffffff; --lock:#1c2622; --onlock:#f2f5f3; --lockcard:#2c3833;
+  --calm:#1D9E75; --pull:#E0951F; --hard:#D2582F; --streak:#b4561c; --streakbg:#fbeadb;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Figtree", -apple-system, system-ui, sans-serif;
+  --ios:-apple-system, "SF Pro Text", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121614; --card:#1c2220; --fg:#e7ece9; --muted:#a6b0aa; --faint:#78837d; --line:#343d39;
+  --accent:#5cc4a6; --accentbg:#16352c; --accentfg:#a6e3d0; --accentline:#2f6e5c;
+  --btn:#e7ece9; --onbtn:#121614; --lock:#0b0f0d; --onlock:#f2f5f3; --lockcard:#232d29;
+  --streak:#f0a46a; --streakbg:#3a2516; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#121614; --card:#1c2220; --fg:#e7ece9; --muted:#a6b0aa; --faint:#78837d; --line:#343d39;
+  --accent:#5cc4a6; --accentbg:#16352c; --accentfg:#a6e3d0; --accentline:#2f6e5c;
+  --btn:#e7ece9; --onbtn:#121614; --lock:#0b0f0d; --onlock:#f2f5f3; --lockcard:#232d29;
+  --streak:#f0a46a; --streakbg:#3a2516; color-scheme:dark }
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(28px,5vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:500;font-size:22px;margin:0 0 12px;text-wrap:balance}
+.lead{color:var(--muted);max-width:62ch;margin:8px 0 0}
+.changes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.changes li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
+.changes b{display:block;font-weight:600;margin-bottom:2px}
+.changes span{color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;align-items:start}
+.cap{font-size:13px;color:var(--muted);margin:0 0 8px;font-weight:600}
+.cap small{display:block;font-weight:400;color:var(--faint)}
+.ph{background:var(--card);border:1px solid var(--line);border-radius:30px;padding:18px;display:flex;flex-direction:column;gap:11px;font-family:var(--ios);font-size:14px;min-width:0}
+.lbl{font-size:11px;color:var(--faint);letter-spacing:.07em;margin:4px 0 0;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.c{border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px}
+.on{background:var(--accentbg);color:var(--accentfg);border-color:var(--accentline)}
+.btn{background:var(--btn);color:var(--onbtn);border-radius:13px;text-align:center;padding:11px;font-weight:600}
+.fld{border:1px solid var(--line);border-radius:11px;padding:9px 11px;color:var(--faint);font-size:14px}
+.fld.typed{color:var(--fg);border-color:var(--accent);box-shadow:0 0 0 3px var(--accentbg)}
+.fld.big{min-height:44px}
+.hint{font-size:12px;color:var(--faint);margin:-4px 0 0}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.d{width:11px;height:11px;border-radius:50%;display:inline-block;flex:none}
+.m{border:1.5px solid var(--faint);box-sizing:border-box}
+.k{background:var(--calm)} .p{background:var(--pull)} .h{background:var(--hard)}
+.muted{color:var(--muted);font-size:13px;margin:0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:10px}
+.banner{background:var(--accentbg);color:var(--accentfg);border-radius:13px;padding:10px 12px;font-size:13px}
+.streak{display:inline-flex;align-items:center;gap:6px;background:var(--streakbg);color:var(--streak);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.week{display:flex;gap:5px}
+.week i{width:22px;height:6px;border-radius:3px;background:var(--streak);display:block}
+.week i.no{background:var(--line)}
+.lock{background:var(--lock);color:var(--onlock);border-color:transparent}
+.lock .time{font-size:52px;font-weight:300;text-align:center;line-height:1;margin:6px 0 0;font-variant-numeric:tabular-nums}
+.lock .date{text-align:center;font-size:14px;opacity:.8;margin:0}
+.note{background:var(--lockcard);border-radius:16px;padding:11px 13px;font-size:13px;display:flex;flex-direction:column;gap:4px}
+.note .app{display:flex;justify-content:space-between;font-size:12px;opacity:.75}
+.reply{background:var(--lockcard);border-radius:14px;padding:9px 12px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.reply .send{background:var(--accent);color:var(--lock);border-radius:999px;width:26px;height:26px;display:grid;place-items:center;font-weight:700;flex:none}
+.decisions{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.dec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;min-width:0}
+.dec h3{font-family:var(--display);font-weight:500;font-size:18px;margin:0 0 6px}
+.dec p{margin:0 0 8px;color:var(--muted);font-size:14px}
+.dec ol{margin:0;padding-left:20px;font-size:14px;display:grid;gap:6px}
+.rec{display:inline-block;background:var(--accentbg);color:var(--accentfg);border-radius:6px;padding:1px 7px;font-size:12px;font-weight:600;margin-left:4px}
+
+.dots .d.on2{background:var(--calm)} .dots .d.esc{background:var(--hard)}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pick div{border-radius:13px;text-align:center;padding:11px;font-weight:600}
+.pick .ok{background:var(--accentbg);color:var(--accentfg);border:1px solid var(--accentline)}
+.pick .esc{background:var(--streakbg);color:var(--streak);border:1px solid var(--streak)}
+.brk{text-align:center;font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:11px;padding:7px}
+.pre{color:var(--fg)} .pre small{color:var(--faint);font-size:12px;margin-left:6px}
+.slots{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}
+.slots i{height:14px;border-radius:3px;background:var(--line);display:block}
+.slots i.y{background:var(--accent)}
+.slotlbl{display:flex;justify-content:space-between;font-size:11px;color:var(--faint)}
+.bars{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:70px}
+.bars div{display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:2px}
+.bars span{display:block;border-radius:3px}
+.bars .a{background:var(--calm)} .bars .b{background:var(--hard)}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;font-size:11px;color:var(--faint);text-align:center}
+.tally{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:13px;font-variant-numeric:tabular-nums}
+.tally span:nth-child(even){color:var(--muted);text-align:right}
+.sub{font-size:13px;font-weight:600;margin:4px 0 0}
+table.t{border-collapse:collapse;width:100%;font-size:14px;min-width:620px}
+.t th,.t td{text-align:left;vertical-align:top;padding:10px 12px;border-top:1px solid var(--line)}
+.t th{font-weight:600;color:var(--muted);font-size:13px}
+.t td:first-child{font-weight:600;width:22%}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.good{color:var(--accent);font-weight:600} .bad{color:var(--hard);font-weight:600}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Emotion check-in, third draft</h1>
+  <p class="lead">Every check-in now asks one more honest question: am I doing what I should be doing, or am I escaping it? The night and weekly reviews then show what you avoid and which feelings come right before you escape. Example data below.</p>
+</header>
+
+<section>
+  <h2>What changed after your feedback</h2>
+  <ul class="changes">
+    <li><b>Should vs actually</b><span>Each check-in logs what I feel, what I should be doing, and what I'm actually doing. The last tap is the honest one: On it or Escaping.</span></li>
+    <li><b>New streak rule</b><span>A day counts when you check in during 5 different hours and close it with the night review. Missing a day resets the streak to zero.</span></li>
+    <li><b>Avoidance patterns</b><span>The night review shows what you escaped from, where you went, and what you felt just before.</span></li>
+    <li><b>Weekly review</b><span>Sunday night, after the night review. Five minutes on the week's patterns and one change for next week.</span></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Screens</h2>
+  <div class="grid">
+
+    <div><p class="cap">0 · Reminder on the lock screen<small>Tap to open the check-in, or hold for quick answers.</small></p>
+    <div class="ph lock">
+      <p class="time">2:15</p><p class="date">Sunday, November 8</p>
+      <div class="note"><div class="app"><span>CHECK-IN</span><span>now</span></div><b>Should be: the Q4 report. Are you on it?</b><span style="opacity:.8">What are you feeling?</span></div>
+      <div class="pick"><div class="ok">On it</div><div class="esc">Escaping</div></div>
+      <div class="reply"><span>bored, avoiding the numbers part</span><span class="send">↑</span></div>
+      <p class="muted" style="color:var(--onlock);opacity:.7;text-align:center">Saves without opening the app. Counts toward the hour.</p>
+    </div></div>
+
+    <div><p class="cap">1 · Check-in<small>Opens from the reminder. Typing first, your past words as bubbles.</small></p>
+    <div class="ph">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b>2:15 PM · Check in</b><span style="color:var(--faint);font-size:13px">Skip</span></div>
+      <p class="lbl">What am I feeling?</p>
+      <div class="fld typed">bored, a bit nervous about the numbers</div>
+      <div class="chips"><span class="c">restless</span><span class="c">bored</span><span class="c">nervous</span><span class="c">pulled to scroll</span></div>
+      <p class="lbl">Where in my body? <span style="text-transform:none;letter-spacing:0">(optional)</span></p>
+      <div class="chips"><span class="c on">chest</span><span class="c">jaw</span><span class="c">stomach</span><span class="c">can't tell</span></div>
+      <p class="lbl">What should I be doing?</p>
+      <div class="fld pre">Q4 report<small>same as last check-in</small></div>
+      <p class="lbl">What am I actually doing?</p>
+      <div class="fld typed">YouTube</div>
+      <div class="chips"><span class="c">Q4 report</span><span class="c">scrolling X</span><span class="c">news</span><span class="c">email</span></div>
+      <div class="pick"><div class="ok">On it</div><div class="esc">Escaping</div></div>
+      <div class="brk">Planned break</div>
+      <p class="muted" style="text-align:center">Escaping saves, then shows: "Noted. Back to: Q4 report."</p>
+    </div></div>
+
+    <div><p class="cap">2 · Today<small>The home screen.</small></p>
+    <div class="ph">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b style="font-size:18px">Sunday, Nov 8</b><span class="streak">12-day streak</span></div>
+      <p class="lbl">Hours logged today · 4 of 5</p>
+      <div class="slots"><i class="y"></i><i class="y"></i><i></i><i class="y"></i><i></i><i class="y"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="slotlbl"><span>9 AM</span><span>3 PM</span><span>9 PM</span></div>
+      <p class="muted">One more hour, then the night review, keeps the streak.</p>
+      <p class="lbl">Check-ins · every 30 min</p>
+      <div class="dots"><span class="d on2"></span><span class="d on2"></span><span class="d on2"></span><span class="d m"></span><span class="d esc"></span><span class="d on2"></span><span class="d esc"></span><span class="d m"></span><span class="d on2"></span><span class="d esc"></span><span class="d on2"></span></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)"><span><span class="d on2"></span> on it</span><span><span class="d esc"></span> escaping</span><span><span class="d m"></span> skipped or break</span></div>
+      <p class="muted">Last: bored · YouTube instead of Q4 report, 2:15 PM</p>
+      <p class="muted">Working on today: start the report before opening news.</p>
+      <div class="btn">Check in now</div>
+    </div></div>
+
+    <div><p class="cap">3 · Night review<small>About 2 minutes. Reminder at 9:30 PM.</small></p>
+    <div class="ph">
+      <b>Sunday, Nov 8 · Closing the day</b>
+      <p class="muted">5 of 5 hours logged. Close the day to make it 13.</p>
+      <p class="muted">Yesterday I wanted to improve: start the report before opening news.</p>
+      <div class="chips"><span class="c">Did it</span><span class="c on">Partly</span><span class="c">Not yet</span></div>
+      <p class="lbl">Today</p>
+      <p style="margin:0">On it 14 · Escaping 6 · Skipped 4</p>
+      <p class="lbl">When I escaped</p>
+      <p class="sub">I was avoiding</p>
+      <div class="tally"><span>Q4 report</span><span>4</span><span>email replies</span><span>2</span></div>
+      <p class="sub">I felt just before</p>
+      <div class="tally"><span>bored</span><span>3</span><span>nervous</span><span>2</span><span>restless</span><span>1</span></div>
+      <p class="sub">I went to</p>
+      <div class="tally"><span>YouTube</span><span>3</span><span>scrolling X</span><span>2</span><span>news</span><span>1</span></div>
+      <p class="muted">Most escapes were between 1 and 4 PM.</p>
+      <p class="lbl">What went well today?</p>
+      <div class="fld typed">Stayed with the spreadsheet 40 min while bored</div>
+      <p class="lbl">What should I improve tomorrow?</p>
+      <div class="fld">When bored on the report, stand up instead of opening YouTube</div>
+      <div class="btn">Close the day</div>
+    </div></div>
+
+    <div><p class="cap">4 · Weekly review<small>Sunday, after the night review. About 5 minutes.</small></p>
+    <div class="ph">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b>Week of Nov 2 to 8</b><span class="streak">13-day streak</span></div>
+      <p style="margin:0">On it <span class="good">71%</span> of check-ins, up from 62% last week.</p>
+      <div class="bars">
+        <div><span class="b" style="height:20%"></span><span class="a" style="height:60%"></span></div>
+        <div><span class="b" style="height:30%"></span><span class="a" style="height:50%"></span></div>
+        <div><span class="b" style="height:15%"></span><span class="a" style="height:70%"></span></div>
+        <div><span class="b" style="height:35%"></span><span class="a" style="height:45%"></span></div>
+        <div><span class="b" style="height:20%"></span><span class="a" style="height:65%"></span></div>
+        <div><span class="b" style="height:10%"></span><span class="a" style="height:40%"></span></div>
+        <div><span class="b" style="height:25%"></span><span class="a" style="height:58%"></span></div>
+      </div>
+      <div class="days"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+      <p class="sub">What I avoided most</p>
+      <div class="tally"><span>Q4 report</span><span>11</span><span>workout</span><span>4</span><span>email replies</span><span>3</span></div>
+      <p class="sub">Feelings right before escaping</p>
+      <div class="tally"><span>bored</span><span>9</span><span>nervous</span><span>6</span><span>restless</span><span>4</span></div>
+      <p class="sub">Where I escaped to</p>
+      <div class="tally"><span>YouTube</span><span>8</span><span>scrolling X</span><span>7</span><span>news</span><span>5</span></div>
+      <p class="muted">Pattern: bored on the Q4 report, then YouTube, weekdays 1 to 4 PM. It happened 6 times.</p>
+      <p class="lbl">What pattern do I see?</p>
+      <div class="fld">I escape when the task gets unclear, not when it's hard</div>
+      <p class="lbl">One change for next week</p>
+      <div class="fld">Write the next small step before stopping for lunch</div>
+      <div class="btn">Close the week</div>
+    </div></div>
+
+    <div><p class="cap">5 · Settings<small>Also shown once on first launch.</small></p>
+    <div class="ph">
+      <p class="lbl">Remind me every</p>
+      <div class="chips"><span class="c">15 min</span><span class="c on">30 min</span><span class="c">1 hr</span><span class="c">2 hr</span><span class="c">4 hr</span><span class="c">Custom</span></div>
+      <p class="hint" style="margin:0">At 4 hours you'd get 3 reminders a day. The streak needs 5 hours, so you'd add check-ins yourself.</p>
+      <div class="row"><span>Active hours</span><span class="muted">9:00 AM to 9:00 PM</span></div>
+      <div class="row"><span>Night review at</span><span class="muted">9:30 PM</span></div>
+      <div class="row"><span>Weekly review</span><span class="muted">Sunday</span></div>
+      <div class="row"><span>Streak needs</span><span class="muted">5 hours + night review</span></div>
+      <div class="row"><span>Pause until tomorrow</span><span style="width:36px;height:21px;border-radius:999px;background:var(--line);display:inline-block"></span></div>
+      <div class="row"><span>Export my data</span><span class="muted">↓</span></div>
+    </div></div>
+
+  </div>
+</section>
+
+<section>
+  <h2>Home-screen web app or installed app?</h2>
+  <p class="lead" style="margin:0 0 14px">Recommendation: the installed app. Reminders and quick lock-screen answers are the heart of this app, and a web app can only get them through a server, with known silent failures. Checked against Apple and WebKit documentation, November 2026.</p>
+  <div class="tw"><table class="t">
+    <thead><tr><th></th><th>Home-screen web app</th><th>Installed app (built with Xcode)</th></tr></thead>
+    <tbody>
+      <tr><td>Reminders every N minutes</td><td><span class="bad">Needs a server.</span> iPhone web apps can't schedule notifications or run timers while closed, so a server must push every reminder.</td><td><span class="good">The phone schedules them itself.</span> No server. iOS holds up to 64 pending reminders, about 2.5 days at 30 minutes, refilled each time you open the app.</td></tr>
+      <tr><td>Answering from the lock screen</td><td><span class="bad">Not possible.</span> No buttons and no typed replies. Tapping opens the app.</td><td><span class="good">On it, Escaping, and typed replies</span> right from the notification, even while locked.</td></tr>
+      <tr><td>Reliability</td><td>Known iOS problems: push subscriptions can stop working quietly, and Apple's push service may still report success. Some people report there's no sound option.</td><td>Local notifications run on the phone and don't depend on a network or server.</td></tr>
+      <tr><td>Privacy</td><td>Entries stay on the phone, but the server knows your reminder schedule and holds a push address.</td><td>Nothing leaves the phone.</td></tr>
+      <tr><td>Keeping your data</td><td>Safe if you use it daily, since home-screen apps are exempt from Safari's 7-day storage wipe. Storage is still "best effort", so export matters.</td><td>Stored like any app's data. Kept until you delete the app.</td></tr>
+      <tr><td>Extras</td><td>A badge count on the icon. No widgets.</td><td>Lock-screen widget later. Breaking through Focus mode needs the paid account.</td></tr>
+      <tr><td>Setup</td><td>No Xcode. You host the page and run a small server, such as a free Cloudflare Worker.</td><td>Update macOS to 26.6 or later, install Xcode, and turn on Developer Mode on the iPhone.</td></tr>
+      <tr><td>Staying installed</td><td>Stays installed. Updates show up the next time you open it.</td><td>Free Apple ID: stops opening after 7 days until you reinstall from the Mac. $99 a year: a development install lasts about a year, or use TestFlight with a new build every 90 days.</td></tr>
+      <tr><td>Cost</td><td>Free on free hosting tiers.</td><td>Free with weekly reinstalls, or $99 a year.</td></tr>
+      <tr><td>Other devices</td><td>Also opens on your Mac or any browser.</td><td>iPhone only, unless built for Mac too.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Decisions still open</h2>
+  <div class="decisions">
+    <div class="dec">
+      <h3>Should rest count as escaping?</h3>
+      <p>Lunch or a walk you planned isn't escaping. Without a separate option, the patterns get muddied.</p>
+      <ol>
+        <li>Add a small "Planned break" option. It doesn't count as escaping and doesn't show in avoidance patterns.<span class="rec">Recommended</span></li>
+        <li>Only On it or Escaping. Breaks get logged as escaping.</li>
+      </ol>
+    </div>
+    <div class="dec">
+      <h3>Does a pause protect the streak?</h3>
+      <p>Missing a day breaks the streak. Pause until tomorrow exists for sick days and travel.</p>
+      <ol>
+        <li>A paused day breaks the streak like any missed day. This is the strict version of your rule.<span class="rec">Recommended</span></li>
+        <li>A paused day neither counts nor breaks. Limit it to a few days a month so it can't become a loophole.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+</div>
