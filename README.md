@@ -174,3 +174,7 @@ All routes are under `/api` and use JSON. The body limit is 1 MB. Errors look li
 
 Every other path serves a file from `public/`. Unknown paths get `index.html`, so the app handles
 routing. Paths containing `..`, encoded slashes, backslashes or NUL bytes get a 400.
+
+## License
+
+[MIT](LICENSE) © 2026 Prateek Joshi
